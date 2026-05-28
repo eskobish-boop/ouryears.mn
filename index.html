@@ -1,0 +1,2920 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>12B Memories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #050505;
+      --near-black: #0a0a0a;
+      --charcoal: #111111;
+      --card: rgba(255,255,255,0.045);
+      --card-strong: rgba(255,255,255,0.075);
+      --line: rgba(255,255,255,0.12);
+      --line-soft: rgba(255,255,255,0.075);
+      --white: #f7f7f7;
+      --soft-white: rgba(255,255,255,0.78);
+      --muted: rgba(255,255,255,0.52);
+      --faint: rgba(255,255,255,0.28);
+      --shadow: rgba(0,0,0,0.6);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.18;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.45'/%3E%3C/svg%3E");
+      mix-blend-mode: screen;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 74px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3rem;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.72), rgba(0,0,0,0));
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav-logo {
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.1rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.64);
+      transition: color .25s ease, opacity .25s ease;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      text-align: center;
+      padding: 8rem 1.5rem 5rem;
+      border-bottom: 1px solid var(--line-soft);
+      isolation: isolate;
+    }
+
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -4;
+      filter: contrast(1.04) brightness(0.86) saturate(1.08);
+      transform: scale(1.015);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 38%),
+        linear-gradient(to bottom, rgba(0,0,0,0.48), rgba(0,0,0,0.32) 42%, rgba(0,0,0,0.94));
+    }
+
+    .hero::after {
+      content: '12B';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -52%);
+      z-index: -2;
+      font-size: clamp(7rem, 22vw, 20rem);
+      font-weight: 800;
+      letter-spacing: -0.08em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.06);
+      text-stroke: 1px rgba(255,255,255,0.06);
+      opacity: .75;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 980px;
+      transform: translateY(12px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: .75rem;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.6rem;
+      color: rgba(255,255,255,0.72);
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: '';
+      width: 34px;
+      height: 1px;
+      background: rgba(255,255,255,0.26);
+    }
+
+    .hero-title {
+      min-height: 1.15em;
+      font-size: clamp(3rem, 8vw, 7.8rem);
+      line-height: .96;
+      font-weight: 300;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.80);
+      text-shadow: 0 20px 80px rgba(0,0,0,.9);
+      transition: opacity .55s ease, filter .55s ease, transform .55s ease;
+    }
+
+    .hero-subtitle {
+      margin: 1.7rem auto 0;
+      max-width: 680px;
+      color: rgba(255,255,255,0.66);
+      font-size: clamp(.9rem, 1.6vw, 1.05rem);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .65rem;
+      color: rgba(255,255,255,.58);
+      font-size: .65rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .mouse {
+      width: 20px;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,.62);
+      border-radius: 999px;
+      position: relative;
+    }
+    .mouse::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 7px;
+      width: 3px;
+      height: 6px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: rgba(255,255,255,.82);
+      animation: wheel 1.8s ease-in-out infinite;
+    }
+
+    @keyframes wheel {
+      0% { opacity: 0; transform: translate(-50%, 0); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, 12px); }
+    }
+
+    .section {
+      padding: 5.6rem 3rem;
+      border-bottom: 1px solid var(--line-soft);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.045), transparent 32%),
+        var(--black);
+    }
+
+    .section-inner { max-width: 1180px; margin: 0 auto; }
+
+    .section-kicker {
+      margin-bottom: .8rem;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin-bottom: 2.3rem;
+      font-size: clamp(2rem, 4vw, 4rem);
+      line-height: 1;
+      font-weight: 300;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.9);
+    }
+
+    .section-lead {
+      max-width: 500px;
+      margin-top: -1rem;
+      margin-bottom: 2.4rem;
+      color: var(--muted);
+      font-size: .96rem;
+    }
+
+    .years-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: .7rem;
+    }
+
+    .year-card {
+      min-height: 122px;
+      padding: 1rem .8rem;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .year-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+      transform: translateX(-120%);
+      transition: transform .75s ease;
+    }
+    .year-card:hover::before { transform: translateX(120%); }
+    .year-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255,255,255,.34);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
+      box-shadow: 0 18px 45px rgba(0,0,0,.36);
+    }
+
+    .year-number {
+      font-size: clamp(1.45rem, 2.4vw, 2rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1;
+    }
+    .year-label {
+      color: var(--soft-white);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .year-desc {
+      color: var(--muted);
+      font-size: .68rem;
+      line-height: 1.45;
+    }
+
+    .memories-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr 1fr 1fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .memory-intro {
+      padding: 1rem 1rem 1rem 0;
+      align-self: center;
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      margin-top: 1.3rem;
+      padding: .8rem 1.05rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--soft-white);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: border-color .25s ease, background .25s ease;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,.38); background: rgba(255,255,255,.05); }
+
+    .memory-card {
+      min-height: 245px;
+      border: 1px solid var(--line-soft);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--card);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      transition: transform .3s ease, border-color .3s ease, filter .3s ease;
+    }
+
+    .memory-card { cursor: pointer; }
+    .memory-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,.24); }
+    .memory-card.featured { min-height: 310px; }
+
+    .memory-visual {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,.88), rgba(0,0,0,.1) 55%, rgba(255,255,255,.08)),
+        radial-gradient(circle at center, rgba(255,255,255,.18), rgba(255,255,255,.02) 34%, rgba(0,0,0,.55)),
+        linear-gradient(135deg, #252525, #050505);
+      filter: grayscale(1);
+    }
+    .memory-visual.photo-1 { background-image: linear-gradient(to top, rgba(0,0,0,.9), rgba(0,0,0,.08)), url('images/memory-1.jpg'); background-size: cover; background-position: center; }
+    .memory-visual.photo-2 { background-image: linear-gradient(to top, rgba(0,0,0,.9), rgba(0,0,0,.08)), url('images/memory-2.jpg'); background-size: cover; background-position: center; }
+    .memory-visual.photo-3 { background-image: linear-gradient(to top, rgba(0,0,0,.9), rgba(0,0,0,.08)), url('images/memory-3.jpg'); background-size: cover; background-position: center; }
+
+    .memory-visual.memory-video-preview {
+      background: #000;
+      filter: none;
+      overflow: hidden;
+    }
+    .memory-visual.memory-video-preview video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      background: #000;
+    }
+    .memory-visual.memory-video-preview::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.06));
+      pointer-events: none;
+      z-index: 1;
+    }
+    .memory-visual.memory-video-preview .memory-video-badge {
+      z-index: 2;
+    }
+
+    .memory-body {
+      position: relative;
+      z-index: 1;
+      padding: 1.15rem;
+    }
+    .memory-title {
+      font-size: clamp(1.05rem, 2vw, 1.45rem);
+      font-weight: 500;
+      line-height: 1.18;
+      color: rgba(255,255,255,.9);
+    }
+    .memory-date {
+      margin-top: .35rem;
+      color: rgba(255,255,255,.58);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .gallery-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 1.7rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1.35fr 1fr 1.2fr;
+      gap: .75rem;
+    }
+
+    .gallery-item {
+      min-height: 138px;
+      border: 1px solid var(--line-soft);
+      border-radius: 9px;
+      overflow: hidden;
+      background:
+        linear-gradient(to top, rgba(0,0,0,.7), rgba(255,255,255,.05)),
+        linear-gradient(135deg, #252525, #090909);
+      position: relative;
+      filter: grayscale(1);
+      transition: transform .3s ease, filter .3s ease, border-color .3s ease;
+    }
+    .gallery-item { cursor: pointer; }
+    .gallery-item[data-gallery="1"] { background-image: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.08)), url('images/gallery-2.jpg'); background-size: cover; background-position: center; }
+    .gallery-item[data-gallery="3"] { background-image: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.08)), url('images/gallery-4.jpg'); background-size: cover; background-position: center; }
+    .gallery-item:hover { transform: translateY(-4px) scale(1.01); filter: grayscale(.3); border-color: rgba(255,255,255,.25); }
+    .gallery-item:nth-child(2) { min-height: 170px; }
+    .gallery-item:nth-child(3) { min-height: 150px; }
+    .gallery-item:nth-child(5) { min-height: 180px; }
+    .gallery-item::after {
+      content: attr(data-label);
+      position: absolute;
+      left: .9rem;
+      bottom: .75rem;
+      color: rgba(255,255,255,.72);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .friends-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.4rem;
+    }
+
+    .friend-card {
+      text-align: center;
+      padding: 1.1rem .8rem 1.3rem;
+      border-radius: 14px;
+      background: transparent;
+      transition: background .25s ease, transform .25s ease;
+    }
+    .friend-card:hover { background: rgba(255,255,255,.035); transform: translateY(-4px); }
+
+    .friend-avatar {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      border: 1px solid rgba(255,255,255,.18);
+      background:
+        radial-gradient(circle at 50% 32%, rgba(255,255,255,.24), transparent 22%),
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.035));
+      box-shadow: inset 0 -18px 30px rgba(0,0,0,.35);
+    }
+    .friend-name { font-size: .92rem; font-weight: 700; color: rgba(255,255,255,.88); }
+    .friend-role { margin-top: .2rem; font-size: .68rem; color: var(--muted); }
+    .friend-quote { margin-top: .65rem; color: rgba(255,255,255,.46); font-size: .72rem; line-height: 1.55; }
+
+
+    /* LUXURY GLASS LOGIN — OPTION 02 */
+
+    /* ── LUXURY PASSWORD GATE BACKGROUND ─────────────────────────── */
+    @keyframes lux-drift1 {
+      0%   { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(2%,1.5%) scale(1.04); }
+      66%  { transform: translate(-1.5%,2%) scale(0.97); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+    @keyframes lux-drift2 {
+      0%   { transform: translate(0,0) scale(1); }
+      40%  { transform: translate(-2%,-1%) scale(1.06); }
+      80%  { transform: translate(1.8%,-2.2%) scale(0.98); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+    @keyframes lux-shimmer {
+      0%   { opacity: 0; transform: translateX(-140%) rotate(-20deg); }
+      50%  { opacity: 1; }
+      100% { opacity: 0; transform: translateX(140%) rotate(-20deg); }
+    }
+    @keyframes lux-pulse {
+      0%, 100% { opacity: .18; }
+      50%       { opacity: .32; }
+    }
+    @keyframes lux-particle {
+      0%   { transform: translateY(0) scale(1); opacity: 0; }
+      15%  { opacity: 1; }
+      85%  { opacity: .6; }
+      100% { transform: translateY(-110vh) scale(.6); opacity: 0; }
+    }
+    @keyframes lux-rotate {
+      from { transform: translate(-50%,-50%) rotate(0deg); }
+      to   { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+
+    .login-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #02010a;
+      opacity: 1;
+      transition: opacity .65s ease, visibility .65s ease;
+      isolation: isolate;
+    }
+    .login-gate.unlocked {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Deep space base */
+    .login-gate::before {
+      content: '';
+      position: absolute;
+      inset: -10%;
+      z-index: -4;
+      animation: lux-drift1 28s ease-in-out infinite;
+      background:
+        /* gold orbs */
+        radial-gradient(ellipse 55% 38% at 12% 20%, rgba(212,175,103,.22), transparent 60%),
+        radial-gradient(ellipse 40% 30% at 88% 78%, rgba(192,155,83,.18), transparent 55%),
+        radial-gradient(ellipse 28% 22% at 70% 14%, rgba(255,220,140,.09), transparent 50%),
+        radial-gradient(ellipse 20% 15% at 34% 88%, rgba(220,180,100,.10), transparent 50%),
+        /* cool silver highlights */
+        radial-gradient(ellipse 35% 25% at 90% 12%, rgba(200,200,220,.11), transparent 55%),
+        radial-gradient(ellipse 22% 18% at 6% 92%, rgba(180,190,210,.08), transparent 50%),
+        /* centre glow */
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(30,22,8,.0), rgba(2,1,10,1) 80%),
+        /* base */
+        linear-gradient(160deg, #0b0905 0%, #040210 40%, #080608 70%, #020102 100%);
+    }
+
+    /* Vignette + edge darkness */
+    .login-gate::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 90% 80% at 50% 50%, transparent 30%, rgba(0,0,0,.65) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,.30) 0%, transparent 18%, transparent 78%, rgba(0,0,0,.50) 100%);
+    }
+
+    .login-bg-video { display: none; }
+
+    /* Grid lines + geometry layer */
+    .login-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Fine luxury grid */
+    .login-overlay::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(212,175,103,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212,175,103,.055) 1px, transparent 1px);
+      background-size: 68px 68px;
+      mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, black 20%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, black 20%, transparent 75%);
+      animation: lux-pulse 8s ease-in-out infinite;
+    }
+
+    /* Diagonal shimmer bar */
+    .login-overlay::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 35%;
+      height: 100%;
+      background: linear-gradient(
+        105deg,
+        transparent 0%,
+        rgba(212,175,103,.0) 38%,
+        rgba(255,235,160,.10) 50%,
+        rgba(212,175,103,.0) 62%,
+        transparent 100%
+      );
+      animation: lux-shimmer 9s ease-in-out infinite 2s;
+    }
+
+    /* Floating particles container — injected via JS below */
+    .lux-particles {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .lux-particle {
+      position: absolute;
+      bottom: -6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,103,.9), rgba(212,175,103,.1) 70%, transparent);
+      animation: lux-particle linear infinite;
+    }
+
+    /* Rotating ring behind the card */
+    .lux-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      border: 1px solid rgba(212,175,103,.10);
+      pointer-events: none;
+      z-index: -2;
+      transform: translate(-50%, -50%);
+    }
+    .lux-ring-1 {
+      width: 640px; height: 640px;
+      border-color: rgba(212,175,103,.09);
+      animation: lux-rotate 38s linear infinite;
+    }
+    .lux-ring-2 {
+      width: 900px; height: 900px;
+      border-color: rgba(212,175,103,.05);
+      border-style: dashed;
+      animation: lux-rotate 60s linear infinite reverse;
+    }
+    .lux-ring-3 {
+      width: 1180px; height: 1180px;
+      border-color: rgba(180,150,80,.04);
+      animation: lux-rotate 90s linear infinite;
+    }
+    /* Gold accent line top */
+    .lux-topline {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 5%, rgba(212,175,103,.55) 30%, rgba(255,235,160,.8) 50%, rgba(212,175,103,.55) 70%, transparent 95%);
+      z-index: 10;
+      box-shadow: 0 0 28px 4px rgba(212,175,103,.28);
+    }
+    .lux-bottomline {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 15%, rgba(212,175,103,.28) 40%, rgba(212,175,103,.42) 50%, rgba(212,175,103,.28) 60%, transparent 85%);
+      z-index: 10;
+    }
+    .login-shell {
+      position: relative;
+      z-index: 2;
+      width: min(760px, calc(100% - 2rem));
+      max-width: 760px;
+      padding: 1px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(255,255,255,.50), rgba(255,255,255,.14) 30%, rgba(255,255,255,.12) 70%, rgba(255,255,255,.42));
+      box-shadow: 
+        0 0 0 1px rgba(255,255,255,.08),
+        0 0 26px rgba(255,255,255,.11),
+        0 18px 70px rgba(0,0,0,.68);
+    }
+    .login-panel {
+      position: relative;
+      width: 100%;
+      padding: 2.35rem 4rem 2.1rem;
+      border-radius: 29px;
+      text-align: center;
+      background:
+        linear-gradient(180deg, rgba(6,6,6,.76), rgba(6,6,6,.68)),
+        rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 0 rgba(255,255,255,.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+    .login-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,.10), transparent 24%),
+        linear-gradient(135deg, rgba(255,255,255,.08), transparent 20%, transparent 78%, rgba(255,255,255,.06));
+    }
+    .login-emblem {
+      width: 150px;
+      margin: 0 auto .65rem;
+      color: rgba(236,224,208,.94);
+      opacity: .96;
+      filter: drop-shadow(0 4px 14px rgba(255,255,255,.06));
+    }
+    .login-emblem svg { width: 100%; height: auto; display: block; }
+    .login-kicker {
+      color: rgba(255,255,255,.76);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .36em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .login-title {
+      color: rgba(255,255,255,.96);
+      font-size: clamp(2.05rem, 5.8vw, 3.6rem);
+      line-height: 1;
+      font-weight: 400;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 1.45rem;
+      text-indent: .18em;
+    }
+    .login-years {
+      color: rgba(255,255,255,.62);
+      font-size: .9rem;
+      letter-spacing: .08em;
+      margin-bottom: .8rem;
+    }
+    .login-subtitle {
+      max-width: 430px;
+      margin: 0 auto 2rem;
+      color: rgba(255,255,255,.62);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .login-form {
+      display: grid;
+      gap: 1rem;
+      max-width: 610px;
+      margin: 0 auto;
+    }
+    .login-input-wrap {
+      position: relative;
+    }
+    .login-lock {
+      position: absolute;
+      left: 1.4rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: rgba(255,255,255,.70);
+      pointer-events: none;
+    }
+    .login-lock svg { width: 100%; height: 100%; display: block; }
+    .login-input {
+      width: 100%;
+      height: 62px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 12px;
+      background: rgba(0,0,0,.18);
+      color: var(--white);
+      outline: none;
+      padding: 0 1.2rem 0 4rem;
+      font: inherit;
+      font-size: 1rem;
+      transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+    .login-input::placeholder { color: rgba(255,255,255,.40); }
+    .login-input:focus {
+      border-color: rgba(255,255,255,.34);
+      background: rgba(255,255,255,.03);
+      box-shadow: 0 0 0 4px rgba(255,255,255,.03);
+    }
+    .login-button {
+      height: 62px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 12px;
+      background: rgba(0,0,0,.04);
+      color: rgba(255,255,255,.95);
+      cursor: pointer;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .login-button:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.05);
+      border-color: rgba(255,255,255,.44);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.05);
+    }
+    .login-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
+      margin-top: 1.15rem;
+    }
+    .login-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.28);
+      box-shadow: 0 0 8px rgba(255,255,255,.12);
+    }
+    .login-dots span.active {
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 0 16px rgba(255,255,255,.36);
+    }
+    .login-error {
+      min-height: 1.2em;
+      color: #ffbdbd;
+      font-size: .84rem;
+      opacity: 0;
+      transition: opacity .2s ease;
+      margin-top: .1rem;
+    }
+    .login-error.show { opacity: 1; }
+    @media (max-width: 760px) {
+      .login-shell { width: min(620px, calc(100% - 1.2rem)); }
+      .login-panel { padding: 2rem 1.35rem 1.6rem; }
+      .login-title { letter-spacing: .12em; text-indent: .12em; font-size: clamp(1.7rem, 7vw, 2.8rem); }
+      .login-emblem { width: 122px; }
+      .login-subtitle { font-size: .92rem; }
+    }
+
+
+    /* CLASSMATES PREMIUM CARDS */
+    .classmates-section {
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.065), transparent 34%),
+        #050505;
+    }
+    .classmates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+      gap: 1rem;
+    }
+    .classmate-card {
+      cursor: pointer;
+      position: relative;
+      min-height: 272px;
+      padding: 1.25rem;
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.025));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 20px 70px rgba(0,0,0,.28);
+      backdrop-filter: blur(14px);
+      transition: transform .28s ease, border-color .28s ease, background .28s ease;
+    }
+    .classmate-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,.28);
+      background: linear-gradient(145deg, rgba(255,255,255,.11), rgba(255,255,255,.035));
+    }
+    .classmate-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .classmate-number {
+      font-size: .78rem;
+      letter-spacing: .18em;
+      color: rgba(255,255,255,.42);
+    }
+    .classmate-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.9);
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.13);
+      font-size: 1.05rem;
+    }
+    .classmate-monogram {
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 1.4rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: rgba(255,255,255,.94);
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.18), transparent 40%), rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .classmate-name {
+      font-size: 1.08rem;
+      line-height: 1.25;
+      font-weight: 800;
+      color: rgba(255,255,255,.94);
+      margin-bottom: .45rem;
+      letter-spacing: -.02em;
+    }
+    .classmate-social {
+      font-size: .82rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,.48);
+      margin-bottom: 1.05rem;
+    }
+    .classmate-social span { color: rgba(255,255,255,.72); }
+    .classmate-vibe {
+      color: rgba(255,255,255,.72);
+      font-size: .9rem;
+      line-height: 1.62;
+    }
+    .classmate-card::after {
+      content: '';
+      position: absolute;
+      inset: auto 1.25rem 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      opacity: 0;
+      transition: opacity .28s ease;
+    }
+    .classmate-card:hover::after { opacity: 1; }
+
+
+    .memories-grid-large {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .memory-card.dynamic-memory { min-height: 260px; cursor: pointer; }
+    .memory-card.dynamic-memory.is-missing .memory-visual { opacity: .55; }
+
+    .gallery-grid.expanded-gallery {
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      align-items: stretch;
+    }
+    .gallery-item {
+      cursor: pointer;
+      display: block;
+      min-height: 190px;
+    }
+    .gallery-item img,
+    .gallery-item video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: none;
+    }
+    .gallery-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.08));
+      pointer-events: none;
+    }
+    .gallery-item::after { z-index: 2; }
+    .gallery-item.is-hidden { display: none; }
+
+    .gallery-item.is-preview-hidden,
+    .memory-card.is-preview-hidden {
+      display: none !important;
+    }
+
+
+
+    /* Memories view-all horizontal carousel */
+    .memory-carousel-wrap {
+      margin-top: 1.4rem;
+      position: relative;
+    }
+    .memory-carousel-hint {
+      color: rgba(255,255,255,.46);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: .9rem;
+    }
+    .memory-carousel {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: .25rem .25rem 1.3rem;
+      scroll-snap-type: x mandatory;
+      direction: ltr;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,.28) rgba(255,255,255,.06);
+      -webkit-overflow-scrolling: touch;
+    }
+    .memory-carousel::-webkit-scrollbar { height: 8px; }
+    .memory-carousel::-webkit-scrollbar-track { background: rgba(255,255,255,.06); border-radius: 999px; }
+    .memory-carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.28); border-radius: 999px; }
+    .memory-carousel-card {
+      direction: ltr;
+      flex: 0 0 min(330px, 82vw);
+      min-height: 390px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.13);
+      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.025));
+      overflow: hidden;
+      position: relative;
+      scroll-snap-align: start;
+      cursor: pointer;
+      transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    }
+    .memory-carousel-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255,255,255,.30);
+      background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.035));
+    }
+    .memory-carousel-visual {
+      height: 220px;
+      background-color: #050505;
+      position: relative;
+      overflow: hidden;
+    }
+    .memory-carousel-visual img,
+    .memory-carousel-visual video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .memory-carousel-visual img {
+      object-fit: cover;
+      z-index: 2;
+    }
+    .memory-carousel-visual video {
+      object-fit: contain;
+      background: #000;
+      z-index: 1;
+    }
+    .memory-carousel-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.05));
+    }
+    .memory-video-badge {
+      position: absolute;
+      right: .8rem;
+      top: .8rem;
+      z-index: 4;
+      padding: .3rem .55rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.86);
+      font-size: .62rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+    }
+    .memory-carousel-body {
+      padding: 1.1rem;
+    }
+    .memory-carousel-index {
+      display: inline-block;
+      color: rgba(255,255,255,.44);
+      font-size: .72rem;
+      letter-spacing: .18em;
+      margin-bottom: .6rem;
+    }
+    .memory-carousel-title {
+      color: rgba(255,255,255,.93);
+      font-size: 1.05rem;
+      line-height: 1.25;
+      margin-bottom: .55rem;
+    }
+    .memory-carousel-text {
+      color: rgba(255,255,255,.58);
+      font-size: .86rem;
+      line-height: 1.65;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .memory-carousel-button {
+      margin-top: 1rem;
+      display: inline-flex;
+      color: rgba(255,255,255,.82);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .credits-strip {
+      overflow: hidden;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--line-soft);
+      background: #030303;
+      padding: 1.4rem 0;
+    }
+    .credits-track {
+      display: inline-block;
+      animation: marquee 34s linear infinite;
+      color: rgba(255,255,255,.8);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .credits-track span { margin: 0 1.2rem; color: rgba(255,255,255,.35); }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: .8fr 1.1fr .9fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    .contact-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .9rem;
+    }
+    .contact-form textarea { grid-column: 1 / -1; min-height: 112px; resize: vertical; }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      border: 1px solid var(--line-soft);
+      border-radius: 7px;
+      background: rgba(255,255,255,.025);
+      color: var(--white);
+      padding: .95rem 1rem;
+      outline: none;
+      font: inherit;
+      font-size: .86rem;
+      transition: border-color .25s ease, background .25s ease;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: rgba(255,255,255,.34);
+      background: rgba(255,255,255,.045);
+    }
+    .contact-form button {
+      justify-self: start;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.06);
+      color: var(--white);
+      border-radius: 7px;
+      padding: .9rem 1.35rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .25s ease, border-color .25s ease;
+    }
+    .contact-form button:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.34); }
+
+    .quote-block {
+      padding-left: 1.4rem;
+      border-left: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.74);
+      font-size: 1.05rem;
+    }
+    .quote-block small {
+      display: block;
+      margin-top: .8rem;
+      color: var(--muted);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: .68rem;
+      font-weight: 800;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.8rem 3rem;
+      color: rgba(255,255,255,.38);
+      font-size: .72rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(8px);
+      transition: opacity .75s ease, transform .75s ease, filter .75s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; filter: blur(0); }
+
+
+
+    /* ── REUSABLE CINEMATIC MODAL ───────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 120000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.3rem;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .modal-overlay.show { display: flex; }
+    .site-modal {
+      width: min(1080px, 100%);
+      max-height: min(82vh, 780px);
+      overflow: hidden;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.07), transparent 28%),
+        linear-gradient(145deg, rgba(18,18,18,.96), rgba(5,5,5,.96));
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 32px 120px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.08);
+      transform: translateY(14px) scale(.97);
+      opacity: 0;
+      transition: transform .28s ease, opacity .28s ease;
+    }
+    .modal-overlay.show .site-modal { transform: translateY(0) scale(1); opacity: 1; }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.35rem 1.45rem;
+      border-bottom: 1px solid rgba(255,255,255,.09);
+    }
+    .modal-kicker {
+      color: rgba(255,255,255,.45);
+      font-size: .68rem;
+      font-weight: 900;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      margin-bottom: .45rem;
+    }
+    .modal-title {
+      color: rgba(255,255,255,.94);
+      font-size: clamp(1.45rem, 4vw, 2.55rem);
+      line-height: 1.05;
+      font-weight: 400;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .modal-close {
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.86);
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .modal-close:hover { background: rgba(255,255,255,.09); transform: rotate(90deg); }
+    .modal-body {
+      padding: 1.45rem;
+      overflow: auto;
+      max-height: calc(min(82vh, 780px) - 112px);
+      color: rgba(255,255,255,.68);
+    }
+    .modal-lead { max-width: 760px; margin-bottom: 1.2rem; line-height: 1.9; }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: .85rem;
+      margin: 1rem 0 1.2rem;
+    }
+    .modal-tile {
+      min-height: 128px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(to top, rgba(0,0,0,.78), rgba(255,255,255,.05)),
+        radial-gradient(circle at 50% 35%, rgba(255,255,255,.13), transparent 34%),
+        linear-gradient(135deg, #222, #070707);
+      display: flex;
+      align-items: flex-end;
+      padding: .85rem;
+      color: rgba(255,255,255,.78);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      filter: grayscale(1);
+    }
+    .modal-list {
+      display: grid;
+      gap: .65rem;
+      margin-top: .9rem;
+    }
+    .modal-list div,
+    .modal-info-card {
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 14px;
+      padding: .9rem 1rem;
+      background: rgba(255,255,255,.035);
+      color: rgba(255,255,255,.70);
+    }
+    .modal-info-card strong { color: rgba(255,255,255,.92); }
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .7rem;
+      margin-top: 1.2rem;
+    }
+    .modal-pill {
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 999px;
+      padding: .45rem .8rem;
+      color: rgba(255,255,255,.58);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .modal-media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0 1.2rem;
+    }
+    .modal-media-card {
+      min-height: 190px;
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(255,255,255,.12), transparent 35%),
+        linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+      position: relative;
+    }
+    .modal-media-card img,
+    .modal-media-card video {
+      width: 100%;
+      height: 235px;
+      object-fit: cover;
+      display: block;
+      background: #050505;
+    }
+    .modal-media-card video { outline: none; }
+    .modal-media-caption {
+      padding: .8rem .95rem;
+      color: rgba(255,255,255,.68);
+      font-size: .82rem;
+      line-height: 1.55;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .modal-media-type {
+      position: absolute;
+      top: .75rem;
+      left: .75rem;
+      z-index: 2;
+      padding: .28rem .55rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.82);
+      font-size: .62rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .modal-media-missing {
+      display: none;
+      min-height: 235px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.2rem;
+      color: rgba(255,255,255,.48);
+      font-size: .82rem;
+      line-height: 1.7;
+      letter-spacing: .04em;
+    }
+    .modal-media-card.is-missing .modal-media-missing { display: flex; }
+    .modal-media-card.is-missing img,
+    .modal-media-card.is-missing video { display: none; }
+    .modal-media-note {
+      margin: 1rem 0 0;
+      color: rgba(255,255,255,.46);
+      font-size: .86rem;
+      line-height: 1.8;
+    }
+
+    .modal-media-card img {
+      cursor: zoom-in;
+      transition: transform .28s ease, filter .28s ease;
+    }
+    .modal-media-card:hover img {
+      transform: scale(1.025);
+      filter: brightness(1.05);
+    }
+    .image-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 120000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .image-lightbox.show { display: flex; }
+    .image-lightbox-inner {
+      width: min(1180px, 100%);
+      max-height: 92vh;
+      position: relative;
+      display: grid;
+      gap: .9rem;
+      animation: lightboxIn .22s ease;
+    }
+    @keyframes lightboxIn {
+      from { opacity: 0; transform: scale(.985) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .image-lightbox img {
+      width: 100%;
+      max-height: 82vh;
+      object-fit: contain;
+      display: block;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: #030303;
+      box-shadow: 0 34px 120px rgba(0,0,0,.7);
+    }
+    .image-lightbox-caption {
+      color: rgba(255,255,255,.70);
+      font-size: .92rem;
+      text-align: center;
+      line-height: 1.7;
+    }
+    .image-lightbox-close {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.42);
+      color: rgba(255,255,255,.9);
+      cursor: pointer;
+      font-size: 1.6rem;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .image-lightbox-close:hover {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.34);
+    }
+    @media (max-width: 620px) {
+      .image-lightbox { padding: .75rem; }
+      .image-lightbox img { border-radius: 14px; max-height: 78vh; }
+      .image-lightbox-close { top: .75rem; right: .75rem; }
+    }
+    @media (max-width: 620px) {
+      .modal-overlay { padding: .8rem; }
+      .modal-head, .modal-body { padding: 1rem; }
+      .modal-close { width: 40px; height: 40px; }
+    }
+
+    @media (max-width: 980px) {
+      .site-nav { padding: 0 1.4rem; }
+      .nav-links { display: none; }
+      .section { padding: 4.5rem 1.25rem; }
+      .years-grid { grid-template-columns: repeat(4, 1fr); }
+      .memories-layout { grid-template-columns: 1fr 1fr; }
+      .memory-intro { grid-column: 1 / -1; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .friends-grid { grid-template-columns: repeat(3, 1fr); }
+      .classmates-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-layout { grid-template-columns: 1fr; }
+      .footer { padding: 1.5rem 1.25rem; flex-direction: column; }
+    }
+
+    @media (max-width: 620px) {
+      .hero-title { font-size: clamp(2.4rem, 13vw, 4.2rem); letter-spacing: .03em; }
+      .eyebrow { letter-spacing: .18em; font-size: .63rem; }
+      .eyebrow::before, .eyebrow::after { width: 20px; }
+      .years-grid { grid-template-columns: repeat(2, 1fr); }
+      .memories-layout { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .friends-grid { grid-template-columns: repeat(2, 1fr); }
+      .classmates-grid { grid-template-columns: 1fr; }
+      .contact-form { grid-template-columns: 1fr; }
+    }
+
+
+    /* VIDEO FIT FIX: show full videos without cropping */
+    .gallery-item video,
+    .modal-media-card video,
+    .memory-card video,
+    .lightbox video {
+      object-fit: contain !important;
+      background: #000 !important;
+    }
+
+    .modal-media-card video {
+      width: 100% !important;
+      height: auto !important;
+      max-height: 72vh !important;
+      aspect-ratio: auto !important;
+      display: block;
+    }
+
+    .gallery-item video {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    .modal-media-card {
+      background: rgba(0,0,0,.72) !important;
+    }
+
+
+
+    .countdown-section {
+      position: relative;
+      overflow: hidden;
+    }
+    .countdown-card {
+      position: relative;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 22px;
+      padding: clamp(1.2rem, 4vw, 2.4rem);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,255,255,.16), transparent 32%),
+        linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
+      box-shadow: 0 24px 80px rgba(0,0,0,.34);
+    }
+    .countdown-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 1.6rem;
+    }
+    .countdown-status {
+      color: rgba(255,255,255,.66);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+    .countdown-box {
+      min-height: 118px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      background: rgba(0,0,0,.28);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 1rem .65rem;
+    }
+    .countdown-value {
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: .9;
+      font-weight: 900;
+      letter-spacing: -.06em;
+      color: rgba(255,255,255,.94);
+      font-variant-numeric: tabular-nums;
+    }
+    .countdown-label {
+      margin-top: .75rem;
+      color: rgba(255,255,255,.6);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .countdown-progress {
+      margin-top: 1.35rem;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .countdown-progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(255,255,255,.28), rgba(255,255,255,.92));
+      transition: width .6s ease;
+    }
+    .countdown-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: .7rem;
+      margin-top: .9rem;
+      color: rgba(255,255,255,.58);
+      font-size: .82rem;
+    }
+    @media (max-width: 760px) {
+      .countdown-head { display: block; }
+      .countdown-grid { grid-template-columns: repeat(2, 1fr); }
+      .countdown-box { min-height: 96px; }
+    }
+
+  </style>
+  <!-- build: hide-empty-gallery-memory-500-fixed-real -->
+</head>
+<body>
+    <div id="loginGate" class="login-gate">
+    <video class="login-bg-video" autoplay muted loop playsinline preload="auto">
+      <source src="hero-video.mp4" type="video/mp4" />
+    </video>
+    <div class="login-overlay"></div>
+    <!-- Luxury accent lines -->
+    <div class="lux-topline"></div>
+    <div class="lux-bottomline"></div>
+    <!-- Rotating rings -->
+    <div class="lux-ring lux-ring-1"></div>
+    <div class="lux-ring lux-ring-2"></div>
+    <div class="lux-ring lux-ring-3"></div>
+    <!-- Floating particles (populated by JS) -->
+    <div class="lux-particles" id="luxParticles"></div>
+    <div class="login-shell">
+      <div class="login-panel" role="dialog" aria-labelledby="loginTitle">
+        <div class="login-emblem" aria-hidden="true">
+          <svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <g opacity="0.95">
+              <path d="M65 84C49 73 43 55 46 34" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path d="M155 84C171 73 177 55 174 34" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <g fill="currentColor">
+                <ellipse cx="51" cy="75" rx="4.2" ry="8.2" transform="rotate(-48 51 75)"/>
+                <ellipse cx="46" cy="65" rx="4.1" ry="7.8" transform="rotate(-39 46 65)"/>
+                <ellipse cx="43.5" cy="54" rx="3.9" ry="7.2" transform="rotate(-28 43.5 54)"/>
+                <ellipse cx="44.5" cy="43.5" rx="3.6" ry="6.6" transform="rotate(-14 44.5 43.5)"/>
+                <ellipse cx="169" cy="75" rx="4.2" ry="8.2" transform="rotate(48 169 75)"/>
+                <ellipse cx="174" cy="65" rx="4.1" ry="7.8" transform="rotate(39 174 65)"/>
+                <ellipse cx="176.5" cy="54" rx="3.9" ry="7.2" transform="rotate(28 176.5 54)"/>
+                <ellipse cx="175.5" cy="43.5" rx="3.6" ry="6.6" transform="rotate(14 175.5 43.5)"/>
+              </g>
+              <text x="110" y="58" text-anchor="middle" fill="currentColor" font-size="34" font-family="Georgia, serif" letter-spacing="1">12B</text>
+            </g>
+          </svg>
+        </div>
+        <p class="login-kicker">12B CLASS ARCHIVE</p>
+        <h1 class="login-title" id="loginTitle">PRIVATE MEMORIES</h1>
+        <div class="login-years">2014 — 2026</div>
+        <p class="login-subtitle">Зөвхөн ангийнханд зориулсан нууц архив</p>
+        <div class="login-form">
+          <div class="login-input-wrap">
+            <span class="login-lock" aria-hidden="true">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <path d="M7.5 10V7.5a4.5 4.5 0 1 1 9 0V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <rect x="4.5" y="10" width="15" height="10" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+            </span>
+            <input id="passwordInput" class="login-input" type="password" placeholder="Нууц үгээ оруулна уу" autocomplete="current-password" />
+          </div>
+          <button id="loginButton" class="login-button" type="button">Нэвтрэх</button>
+          <div class="login-dots" aria-hidden="true"><span class="active"></span><span></span></div>
+          <p id="loginError" class="login-error">Нууц үг буруу байна.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="site-nav">
+    <a class="nav-logo" href="#">12B Memories</a>
+    <ul class="nav-links">
+      <li><a href="#years">Years</a></li>
+      <li><a href="#memories">Memories</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#countdown">Timer</a></li>
+      <li><a href="#classmates">Classmates</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" id="top">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
+      <source src="hero-video.mp4" type="video/mp4" />
+    </video>
+
+    <div class="hero-content">
+      <div class="eyebrow">12B АНГИ · БИДНИЙ ТҮҮХ · 2014 — 2026</div>
+      <h1 class="hero-title" id="heroText">БИДНИЙ ТҮҮХ ЭНДЭЭС ЭХЭЛСЭН...</h1>
+      <p class="hero-subtitle">12 жил хамт бүтээсэн дурсамжууд — бүгд энд үлдэнэ.</p>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="mouse"></div>
+      <span>Scroll</span>
+    </div>
+  </header>
+
+  <section class="section" id="years">
+    <div class="section-inner">
+      <p class="section-kicker reveal">Our years</p>
+      <h2 class="section-title reveal">Бидний 12 жил</h2>
+      <div class="years-grid">
+        <div class="year-card reveal" data-year="0" tabindex="0" role="button"><div class="year-number">1</div><div><div class="year-label">Анги</div><p class="year-desc">Бидний эхлэл</p></div></div>
+        <div class="year-card reveal" data-year="1" tabindex="0" role="button"><div class="year-number">2</div><div><div class="year-label">Анги</div><p class="year-desc">Шинэ найзууд</p></div></div>
+        <div class="year-card reveal" data-year="2" tabindex="0" role="button"><div class="year-number">3</div><div><div class="year-label">Анги</div><p class="year-desc">Хамтдаа өссөн</p></div></div>
+        <div class="year-card reveal" data-year="3" tabindex="0" role="button"><div class="year-number">4</div><div><div class="year-label">Анги</div><p class="year-desc">Дурсамжууд</p></div></div>
+        <div class="year-card reveal" data-year="4" tabindex="0" role="button"><div class="year-number">5</div><div><div class="year-label">Анги</div><p class="year-desc">Бага насны бүлэг</p></div></div>
+        <div class="year-card reveal" data-year="5" tabindex="0" role="button"><div class="year-number">6</div><div><div class="year-label">Анги</div><p class="year-desc">Ковидийн эрэн үе</p></div></div>
+        <div class="year-card reveal" data-year="6" tabindex="0" role="button"><div class="year-number">7</div><div><div class="year-label">Анги</div><p class="year-desc">Online хичээлийн үе</p></div></div>
+        <div class="year-card reveal" data-year="7" tabindex="0" role="button"><div class="year-number">8</div><div><div class="year-label">Анги</div><p class="year-desc">Хамтдаа туулсан өдрүүд</p></div></div>
+        <div class="year-card reveal" data-year="8" tabindex="0" role="button"><div class="year-number">9</div><div><div class="year-label">Анги</div><p class="year-desc">Хичээл ба урам зориг</p></div></div>
+        <div class="year-card reveal" data-year="9" tabindex="0" role="button"><div class="year-number">10</div><div><div class="year-label">Анги</div><p class="year-desc">Сонголт ба ирээдүй</p></div></div>
+        <div class="year-card reveal" data-year="10" tabindex="0" role="button"><div class="year-number">11</div><div><div class="year-label">Анги</div><p class="year-desc">Сүүлийн шат</p></div></div>
+        <div class="year-card reveal" data-year="11" tabindex="0" role="button"><div class="year-number">12</div><div><div class="year-label">Анги</div><p class="year-desc">Төгсгөлийн бүлэг</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="memories">
+    <div class="section-inner">
+      <div class="gallery-top">
+        <div>
+          <p class="section-kicker reveal">Memories</p>
+          <h2 class="section-title reveal">Дурсамжууд</h2>
+          <p class="section-lead reveal">Бидний хамтдаа өнгөрүүлсэн жижиг мөчүүд, том инээд, мартагдахгүй өдрүүд.</p>
+        </div>
+        <a class="btn-ghost reveal" href="#" id="viewAllMemories">Бүгдийг харах →</a>
+      </div>
+      <div id="memoriesGrid" class="memories-grid-large"></div>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="section-inner">
+      <div class="gallery-top">
+        <div>
+          <p class="section-kicker reveal">Gallery</p>
+          <h2 class="section-title reveal">Зургийн цомгийн хэсэг</h2>
+        </div>
+        <a class="btn-ghost reveal" href="#" id="viewAllGallery">Бүгдийг харах →</a>
+      </div>
+      <div class="gallery-grid expanded-gallery" id="galleryGrid"></div>
+    </div>
+  </section>
+
+
+
+  <section class="section classmates-section" id="classmates">
+    <div class="section-inner">
+      <p class="section-kicker reveal">Classmates</p>
+      <h2 class="section-title reveal">Ангийн нөхөд</h2>
+      <p class="section-lead reveal">12B-ийн түүхийг хамт бүтээсэн хүмүүс — цагаан толгойн дарааллаар.</p>
+      <div id="classmatesGrid" class="classmates-grid"></div>
+    </div>
+  </section>
+
+  <div class="credits-strip" aria-label="Credits">
+    <div class="credits-track">
+      МӨНГӨНШАГАЙ-ОЧИР <span>•</span> МЯГМАРБАЯР <span>•</span> АНАР <span>•</span> АНУЖИН <span>•</span> БАЯРМАА <span>•</span> МӨНХБИЛГҮҮН <span>•</span> БОЛОРТУНГАЛАГ <span>•</span> МӨНХГЭРЭЛ <span>•</span> БАЯРЖАВХЛАН <span>•</span> ХҮСЛЭН <span>•</span> ЛУТ-ЭРДЭНЭ <span>•</span> БИЛГҮҮНЗАЯА <span>•</span> МӨНХ-ЭРДЭНЭ <span>•</span> МӨНХСҮЛД <span>•</span> ЛХАГВАДУЛАМ <span>•</span> НОМИН-ЭРДЭНЭ <span>•</span> АМАР ТАЙВАН <span>•</span> ТӨГӨЛДӨР <span>•</span> ДАРИЙМАА <span>•</span> НАМУУН <span>•</span> ТЭЛМҮҮН <span>•</span> ТЭМҮҮЖИН <span>•</span> СУВД-ЭРДЭНЭ <span>•</span> МӨНХЖИН <span>•</span> ЭНХБАТ <span>•</span>
+      МӨНГӨНШАГАЙ-ОЧИР <span>•</span> МЯГМАРБАЯР <span>•</span> АНАР <span>•</span> АНУЖИН <span>•</span> БАЯРМАА <span>•</span> МӨНХБИЛГҮҮН <span>•</span> БОЛОРТУНГАЛАГ <span>•</span> МӨНХГЭРЭЛ <span>•</span> БАЯРЖАВХЛАН <span>•</span> ХҮСЛЭН <span>•</span> ЛУТ-ЭРДЭНЭ <span>•</span> БИЛГҮҮНЗАЯА <span>•</span> МӨНХ-ЭРДЭНЭ <span>•</span> МӨНХСҮЛД <span>•</span> ЛХАГВАДУЛАМ <span>•</span> НОМИН-ЭРДЭНЭ <span>•</span> АМАР ТАЙВАН <span>•</span> ТӨГӨЛДӨР <span>•</span> ДАРИЙМАА <span>•</span> НАМУУН <span>•</span> ТЭЛМҮҮН <span>•</span> ТЭМҮҮЖИН <span>•</span> СУВД-ЭРДЭНЭ <span>•</span> МӨНХЖИН <span>•</span> ЭНХБАТ <span>•</span>
+    </div>
+  </div>
+
+  <section class="section" id="contact">
+    <div class="section-inner contact-layout">
+      <div class="reveal">
+        <p class="section-kicker">Contact</p>
+        <h2 class="section-title">Холбогдох</h2>
+        <p class="section-lead">Санал, зураг, дурсамж нэмүүлэх бол эндээс холбогдоорой.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem">
+          <a class="btn-ghost" href="https://m.me/j/AbYtDqDgmJ0ivX2Z/?send_source=gc:copy_invite_link_c" target="_blank" rel="noopener noreferrer">Messenger group →</a>
+          <a class="btn-ghost" href="https://discord.gg/V98uycmY" target="_blank" rel="noopener noreferrer">Discord →</a>
+        </div>
+        <p style="color:rgba(255,255,255,.72);font-size:.9rem;margin-top:1rem">eskobish@gmail.com</p>
+      </div>
+      <form class="contact-form reveal" onsubmit="event.preventDefault(); alert('Зурвас илгээх хэсгийг имэйлтэй холбох боломжтой.');">
+        <input type="text" placeholder="Таны нэр" required>
+        <input type="email" placeholder="Имэйл">
+        <textarea placeholder="Зурвас" required></textarea>
+        <button type="submit">Илгээх →</button>
+      </form>
+      <blockquote class="quote-block reveal">
+        “Цаг хугацаа өнгөрсөн ч бидний дурсамж үргэлж үлдэнэ.”
+        <small>— 12B анги</small>
+      </blockquote>
+    </div>
+  </section>
+
+
+  <section class="section countdown-section" id="countdown">
+    <div class="section-inner">
+      <div class="countdown-card reveal">
+        <div class="countdown-head">
+          <div>
+            <p class="section-kicker">Countdown</p>
+            <h2 class="section-title">10 жилийн уулзалт буюу 10 жилийн дараа уулзах өдөр</h2>
+            <p class="section-lead">2026.05.29-өөс эхэлсэн 10 жилийн хугацаа дуусах өдөр хүртэлх амьд тоолуур.</p>
+          </div>
+          <div class="countdown-status" id="countdownStatus">Loading</div>
+        </div>
+        <div class="countdown-grid" aria-label="10 year countdown">
+          <div class="countdown-box"><div><div class="countdown-value" id="cdYears">00</div><div class="countdown-label">Years</div></div></div>
+          <div class="countdown-box"><div><div class="countdown-value" id="cdDays">000</div><div class="countdown-label">Days</div></div></div>
+          <div class="countdown-box"><div><div class="countdown-value" id="cdHours">00</div><div class="countdown-label">Hours</div></div></div>
+          <div class="countdown-box"><div><div class="countdown-value" id="cdMinutes">00</div><div class="countdown-label">Minutes</div></div></div>
+        </div>
+        <div class="countdown-progress"><span id="cdProgress"></span></div>
+        <div class="countdown-meta">
+          <span>Start: 2026.05.29</span>
+          <span>End: 2036.05.29</span>
+          <span id="cdPercent">0%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="modal-overlay" id="siteModal" aria-hidden="true">
+    <div class="site-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <div class="modal-kicker" id="modalKicker">12B Archive</div>
+          <h2 class="modal-title" id="modalTitle">Modal title</h2>
+        </div>
+        <button class="modal-close" id="modalClose" type="button" aria-label="Close modal">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>© 12B Class Memories · 2014 — 2026</span>
+    <span>Made with heart by 12B</span>
+  </footer>
+
+  <script>
+    const texts = [
+      'БИДНИЙ ТҮҮХ ЭНДЭЭС ЭХЭЛСЭН...',
+      '12 ЖИЛ НЭГЭН ЗАМААР...',
+      'ИНЭЭД, НУЛИМС, ДУРСАМЖ...',
+      '12B — БИДНИЙ ХАМГИЙН НАНДИН БҮЛЭГ'
+    ];
+
+    let textIndex = 0;
+    const heroText = document.getElementById('heroText');
+    setInterval(() => {
+      heroText.style.opacity = 0;
+      heroText.style.filter = 'blur(10px)';
+      heroText.style.transform = 'translateY(10px)';
+      setTimeout(() => {
+        textIndex = (textIndex + 1) % texts.length;
+        heroText.textContent = texts[textIndex];
+        heroText.style.opacity = 1;
+        heroText.style.filter = 'blur(0)';
+        heroText.style.transform = 'translateY(0)';
+      }, 560);
+    }, 3600);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach((el, index) => {
+      el.style.transitionDelay = `${Math.min(index % 6, 5) * 55}ms`;
+      observer.observe(el);
+    });
+
+
+    const classmates = [
+      { name: "Мөнгөншагай-Очир", fb: "Мөнгөншагай", ig: "1_shagai", vibe: "Ангийн инээд нэмдэг шогч нэгэн", icon: "✦" },
+      { name: "Мягмарбаяр", fb: "Н. Тэнгис", ig: "", vibe: "Бодолтой, нүүдэл тооцдог шатарчин", icon: "♟" },
+      { name: "Анар", fb: "Anar Gansuh", ig: "", vibe: "PUBG-ийн талбарт өөрийн ертөнцтэй", icon: "🎮" },
+      { name: "Анужин", fb: "Anu jinn", ig: "anun_jn", vibe: "Эерэг уур амьсгал түгээдэг", icon: "✨" },
+      { name: "Баярмаа", fb: "Bayrmaa Dawaahvv", ig: "", vibe: "Даруухан, чимээгүйхэн дулаан хүн", icon: "◌" },
+      { name: "Мөнхбилгүүн", fb: "Bil Gvn", ig: "", vibe: "Эрч хүчээр дүүрэн, ангийн энерги", icon: "⚡" },
+      { name: "Болортунгалаг", fb: "Bolrxnn", ig: "bolrxu", vibe: "Хөөрхөн төрх, зөөлөн vibe-тай", icon: "♡" },
+      { name: "Мөнхгэрэл", fb: "Gantulga Mnkhgrl", ig: "president_mnkhgrl", vibe: "Moto sport-ийн мэдрэмжтэй, хурдны vibe", icon: "🏍" },
+      { name: "Баяржавхлан", fb: "Javhaa Javhaa", ig: "javkha__01", vibe: "Өөрийн гэсэн style-тай", icon: "◆" },
+      { name: "Хүслэн", fb: "Khuslen", ig: "a_khusle", vibe: "Дурсамжийг кадрт үлдээдэг photographer", icon: "◉" },
+      { name: "Лут-Эрдэнэ", fb: "Lutkaa Lutaa", ig: "kazumaa02", vibe: "Тууштай, fighter mindset-тай boxer", icon: "🥊" },
+      { name: "Билгүүнзаяа", fb: "Mikey Dum", ig: "", vibe: "Technology талдаа мэдрэмжтэй IT master", icon: "⌘" },
+      { name: "Мөнх-Эрдэнэ", fb: "Monkherdene Dagvasuren", ig: "", vibe: "Зөв бодолтой, дуугүйхэн гүн хүн", icon: "◈" },
+      { name: "Мөнхсүлд", fb: "Munkhsuld", ig: "qrtlepn", vibe: "Ухаалаг, аливааг тайван хардаг", icon: "◈" },
+      { name: "Лхагвадулам", fb: "Niji Niji", ig: "", vibe: "Даруухан, өөрийнхөөрөө хүн", icon: "◌" },
+      { name: "Г. Номин-Эрдэнэ", fb: "Nomin Erdene Gantulga", ig: "nom1n_rdn", vibe: "Яриа эхлүүлж, орчныг амьдруулдаг", icon: "❞" },
+      { name: "Амар тайван", fb: "Taivna-vi Britannia", ig: "", vibe: "Маш тайван, өөрийн гэсэн өнгөтэй", icon: "—" },
+      { name: "О. Төгөлдөр", fb: "Tuguldur", ig: "qqqwertyog", vibe: "Яриасаг, орчноо уйдаадаггүй", icon: "❞" },
+      { name: "Төгөлдөр", fb: "Tuguldur Surenkhuu", ig: "", vibe: "TikTok vibe-тай, creative нэгэн", icon: "▶" },
+      { name: "Ууганцэцэг", fb: "Uugantsetseg Uka", ig: "uugantsetseg_uka323", vibe: "Эелдэг, зөөлөн харилцаатай", icon: "♡" },
+      { name: "Тэмүүлэн", fb: "Б. Тэмүүлэн", ig: "", vibe: "Мөрөөрөө, өөрийнхөөрөө явдаг", icon: "—" },
+      { name: "Баттүшиг", fb: "Г. Баттүшиг", ig: "____tushig", vibe: "Зөөлөн сэтгэлтэй, тайван хүн", icon: "◯" },
+      { name: "Мөнхцацрал", fb: "М. Цацрал", ig: "", vibe: "Чимээгүйхэн, даруухан presence-тэй", icon: "◌" },
+      { name: "М. Номин-Эрдэнэ", fb: "Номин Эрдэнэ", ig: "acidzxcn", vibe: "Инээмтгий, дулаан энерги түгээдэг", icon: "☺" },
+      { name: "Отгонзаяа", fb: "Отгонзаяа Б.", ig: "", vibe: "Их судалдаг, мэдлэгт дуртай", icon: "✎" },
+      { name: "Дариймаа", fb: "С. Амирид", ig: "amirkenora", vibe: "Камерын өмнө өөрийн гэсэн төрхтэй photo model", icon: "✧" },
+      { name: "Намуун", fb: "С. Намуун", ig: "rhythmfly", vibe: "Ангийн уур амьсгалыг өргөдөг уриалагч", icon: "★" },
+      { name: "Тэлмүүн", fb: "Тэлмүүн Тэлка", ig: "_telmuuntelka", vibe: "Энерги өгдөг, уриалдаг нэгэн", icon: "★" },
+      { name: "Тэмүүжин", fb: "У. Тэмүүжин", ig: "temuujin__u", vibe: "Зөв сэтгэлтэй, найдвартай хүн", icon: "♥" },
+      { name: "Сувд-Эрдэнэ", fb: "Ч. Сувд-Эрдэнэ", ig: "weeeuuu__", vibe: "Хариуцлагатай, ангийн даргын presence-тэй", icon: "♛" },
+      { name: "Мөнхжин", fb: "Э. Мөнхжин", ig: "_nxjn", vibe: "Даруухан, чимээгүйхэн дулаан хүн", icon: "◌" },
+      { name: "Энхбат", fb: "Э. Энхбат", ig: "", vibe: "Чимээгүйхэн, өөрийнхөөрөө нэгэн", icon: "◌" },
+      { name: "Эгиймаа", fb: "", ig: "", vibe: "Ангийн дурсамжийн нэг хэсэг", icon: "✧" },
+      { name: "Эрдэнэсайхан", fb: "", ig: "esko0421", vibe: "Царайлаг model", icon: "✧" }
+    ];
+
+    const classmatesAlphabetical = [...classmates].sort((a, b) =>
+      a.name.localeCompare(b.name, 'mn', { sensitivity: 'base' })
+    );
+
+    function getMonogram(name) {
+      const clean = name.replace(/[.\-]/g, ' ').trim();
+      const parts = clean.split(/\s+/).filter(Boolean);
+      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+      return clean.slice(0, 2).toUpperCase();
+    }
+
+    function renderClassmates() {
+      const grid = document.getElementById('classmatesGrid');
+      if (!grid) return;
+      grid.innerHTML = classmatesAlphabetical.map((person, index) => {
+        const number = String(index + 1).padStart(2, '0');
+        const instagram = person.ig ? `<div>IG: <span>@${person.ig}</span></div>` : '';
+        return `
+          <article class="classmate-card reveal" data-classmate="${index}" tabindex="0" role="button">
+            <div class="classmate-top">
+              <div class="classmate-number">${number}</div>
+              <div class="classmate-icon">${person.icon}</div>
+            </div>
+            <div class="classmate-monogram">${getMonogram(person.name)}</div>
+            <h3 class="classmate-name">${person.name}</h3>
+            <div class="classmate-social">
+              <div>FB: <span>${person.fb}</span></div>
+              ${instagram}
+            </div>
+            <p class="classmate-vibe">${person.vibe}</p>
+          </article>`;
+      }).join('');
+    }
+
+    renderClassmates();
+    document.querySelectorAll('.classmate-card.reveal').forEach((el, index) => {
+      el.style.transitionDelay = `${Math.min(index % 6, 5) * 55}ms`;
+      observer.observe(el);
+    });
+
+
+    /* ── Interactive modal data + handlers ───────────────────── */
+    const yearDetails = [
+      {
+            "title": "1-р анги · Бидний эхлэл",
+            "kicker": "Year 01",
+            "text": "Анхны алхам, анхны найзууд, анхны дурсамжууд. Энэ жилээс 12B-ийн түүх эхэлсэн.",
+            "tags": [
+                  "Анхны өдөр",
+                  "Шинэ найзууд",
+                  "Эхлэл"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade1-1.jpg",
+                        "caption": "1-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade1-2.jpg",
+                        "caption": "1-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade1-3.jpg",
+                        "caption": "1-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade1-1.mp4",
+                        "caption": "1-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "2-р анги · Танил болсон үе",
+            "kicker": "Year 02",
+            "text": "Ангидаа дасаж, бие биенээ илүү сайн таньж эхэлсэн дулаахан үе.",
+            "tags": [
+                  "Найзууд",
+                  "Өдөр тутам",
+                  "Дассан үе"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade2-1.jpg",
+                        "caption": "2-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade2-2.jpg",
+                        "caption": "2-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade2-3.jpg",
+                        "caption": "2-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade2-1.mp4",
+                        "caption": "2-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "3-р анги · Хамтдаа өссөн",
+            "kicker": "Year 03",
+            "text": "Хүүхэд насны жижигхэн мөчүүд дурсамж болж үлдсэн жил.",
+            "tags": [
+                  "Инээд",
+                  "Хичээл",
+                  "Дурсамж"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade3-1.jpg",
+                        "caption": "3-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade3-2.jpg",
+                        "caption": "3-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade3-3.jpg",
+                        "caption": "3-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade3-1.mp4",
+                        "caption": "3-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "4-р анги · Илүү ойртсон",
+            "kicker": "Year 04",
+            "text": "Ангийн уур амьсгал бүрэлдэж, хамтдаа байх мэдрэмж хүчтэй болсон үе.",
+            "tags": [
+                  "Ойртсон",
+                  "Ангийн vibe",
+                  "Нэг баг"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade4-1.jpg",
+                        "caption": "4-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade4-2.jpg",
+                        "caption": "4-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade4-3.jpg",
+                        "caption": "4-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade4-1.mp4",
+                        "caption": "4-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "5-р анги · Бага насны сүүлчийн бүлэг",
+            "kicker": "Year 05",
+            "text": "5-р ангид бид өөрсдийгөө том болсон гэж боддог байсан ч үнэндээ хамгийн гэнэн, хамгийн нандин үе дээрээ явж байжээ. Инээд, сахилгагүйтэл, ангийн уур амьсгал, хамтдаа өнгөрүүлсэн жирийн өдрүүд хүртэл одоо эргээд харахад хамгийн үнэ цэнтэй дурсамж болсон байна.",
+            "tags": [
+                  "Гэнэн үе",
+                  "Сахилгагүйтэл",
+                  "Бага нас"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade5-1.jpg",
+                        "caption": "Бидний гэнэн инээд"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade5-2.jpg",
+                        "caption": "Хамтдаа байсан энгийн өдөр"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade5-3.jpg",
+                        "caption": "Бага насны сүүлчийн өнгө"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade5-4.jpg",
+                        "caption": "Ангийн уур амьсгал"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade5-5.jpg",
+                        "caption": "Мартагдахгүй жижиг мөч"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade5-6.jpg",
+                        "caption": "Тэр үеийн бид"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade5-1.mp4",
+                        "caption": "5-р ангийн богино бичлэг 1"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade5-2.mp4",
+                        "caption": "5-р ангийн богино бичлэг 2"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade5-3.mp4",
+                        "caption": "5-р ангийн богино бичлэг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade5-4.mp4",
+                        "caption": "5-р ангийн богино бичлэг 4"
+                  }
+            ]
+      },
+      {
+            "title": "6-р анги · Ковидийн эрэн үе",
+            "kicker": "Year 06",
+            "text": "Ковидийн эрэн үе эхэлж, сургууль, анги, найзуудын уур амьсгал хүртэл өөр хэмнэлд орсон жил. Бид нэг дор цуглах боломж багассан ч дурсамж өөр хэлбэрээр үргэлжилсэн.",
+            "tags": [
+                  "Ковидийн эрэн үе",
+                  "Өөр хэмнэл",
+                  "Дасан зохицсон"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade6-1.jpg",
+                        "caption": "6-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade6-2.jpg",
+                        "caption": "6-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade6-3.jpg",
+                        "caption": "6-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade6-1.mp4",
+                        "caption": "6-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "7-р анги · Online хичээлийн үе",
+            "kicker": "Year 07",
+            "text": "Online хичээл, дэлгэцийн цаадах анги, mute/unmute, homework screenshot гээд тухайн үеийн хамгийн өөр дурсамжууд энд үлдсэн.",
+            "tags": [
+                  "Online class",
+                  "Mute / Unmute",
+                  "Дэлгэцийн цаадах анги"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade7-1.jpg",
+                        "caption": "7-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade7-2.jpg",
+                        "caption": "7-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade7-3.jpg",
+                        "caption": "7-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade7-1.mp4",
+                        "caption": "7-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "8-р анги · Хамтдаа туулсан өдрүүд",
+            "kicker": "Year 08",
+            "text": "Жирийн санагдсан өдрүүд одоо хамгийн дулаахан дурсамж болж үлджээ.",
+            "tags": [
+                  "Хамтдаа",
+                  "Өдөр тутам",
+                  "Дулаахан"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade8-1.jpg",
+                        "caption": "8-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade8-2.jpg",
+                        "caption": "8-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade8-3.jpg",
+                        "caption": "8-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade8-1.mp4",
+                        "caption": "8-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "9-р анги · Хичээл ба урам зориг",
+            "kicker": "Year 09",
+            "text": "Илүү хариуцлагатай болж, ирээдүйгээ бодож эхэлсэн ч инээдээ алдаагүй үе.",
+            "tags": [
+                  "Хичээл",
+                  "Урам зориг",
+                  "Хариуцлага"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade9-1.jpg",
+                        "caption": "9-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade9-2.jpg",
+                        "caption": "9-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade9-3.jpg",
+                        "caption": "9-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade9-4.jpg",
+                        "caption": "9-р ангийн зураг 4"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade9-5.jpg",
+                        "caption": "9-р ангийн зураг 5"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade9-1.mp4",
+                        "caption": "9-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "10-р анги · Сонголт ба ирээдүй",
+            "kicker": "Year 10",
+            "text": "Ахлах ангийн эхлэл. Бидний зам илүү тодорхой болж эхэлсэн жил.",
+            "tags": [
+                  "Ахлах анги",
+                  "Сонголт",
+                  "Ирээдүй"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade10-1.jpg",
+                        "caption": "10-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade10-2.jpg",
+                        "caption": "10-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade10-3.jpg",
+                        "caption": "10-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade10-1.mp4",
+                        "caption": "10-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "11-р анги · Сүүлийн шат",
+            "kicker": "Year 11",
+            "text": "Төгсөлт ойртож байгааг мэдэрч, хамт байх хугацаа улам үнэ цэнтэй болсон үе.",
+            "tags": [
+                  "Сүүлийн шат",
+                  "Үнэ цэнэ",
+                  "Бэлтгэл"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade11-1.jpg",
+                        "caption": "11-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade11-2.jpg",
+                        "caption": "11-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade11-3.jpg",
+                        "caption": "11-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade11-1.mp4",
+                        "caption": "11-р ангийн бичлэг 1"
+                  }
+            ]
+      },
+      {
+            "title": "12-р анги · Төгсгөлийн бүлэг",
+            "kicker": "Year 12",
+            "text": "12 жил хамт бүтээсэн түүхийн хамгийн сүүлчийн, хамгийн нандин бүлэг.",
+            "tags": [
+                  "Төгсөлт",
+                  "Сүүлчийн бүлэг",
+                  "Шинэ эхлэл"
+            ],
+            "media": [
+                  {
+                        "type": "image",
+                        "src": "images/grade12-1.jpg",
+                        "caption": "12-р ангийн зураг 1"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade12-2.jpg",
+                        "caption": "12-р ангийн зураг 2"
+                  },
+                  {
+                        "type": "image",
+                        "src": "images/grade12-3.jpg",
+                        "caption": "12-р ангийн зураг 3"
+                  },
+                  {
+                        "type": "video",
+                        "src": "videos/grade12-1.mp4",
+                        "caption": "12-р ангийн бичлэг 1"
+                  }
+            ]
+      }
+];
+
+    const memoryDetails = Array.from({ length: 500 }, (_, i) => {
+      const n = i + 1;
+      const label = String(n).padStart(2, '0');
+      return {
+        title: `Дурсамж ${label}`,
+        date: '',
+        text: '12B-ийн дурсамжийн нэг хэсэг.',
+        tags: ['Дурсамж', '12B'],
+        media: [
+          { type: 'video', src: `videos/memory-${n}.mp4`, caption: `Дурсамж ${label} · бичлэг` }
+        ]
+      };
+    });
+
+    const galleryDetails = Array.from({ length: 500 }, (_, i) => {
+      const n = i + 1;
+      const label = String(n).padStart(2, '0');
+      return {
+        kind: 'image',
+        title: `Зургийн цомог ${label}`,
+        text: '12B-ийн зургийн цомгийн нэг хэсэг.',
+        media: [{ type: 'image', src: `images/gallery-${n}.jpg`, caption: `Зураг ${label}` }]
+      };
+    });
+
+
+
+    let visibleMemoryPreviewCount = 0;
+    let visibleGalleryPreviewCount = 0;
+
+    function removeMissingMediaCard(mediaEl) {
+      const card = mediaEl.closest('.memory-card, .memory-carousel-card, .gallery-item, .modal-media-card');
+      if (card) card.remove();
+    }
+
+    function showMemoryPreviewCard(mediaEl) {
+      const card = mediaEl.closest('.memory-card');
+      if (!card || card.dataset.previewChecked === 'true') return;
+      card.dataset.previewChecked = 'true';
+      if (visibleMemoryPreviewCount < 5) {
+        card.classList.remove('is-preview-hidden');
+        visibleMemoryPreviewCount += 1;
+      } else {
+        card.remove();
+      }
+    }
+
+    function showGalleryPreviewCard(mediaEl) {
+      const card = mediaEl.closest('.gallery-item');
+      if (!card || card.dataset.previewChecked === 'true') return;
+      card.dataset.previewChecked = 'true';
+      if (visibleGalleryPreviewCount < 5) {
+        card.classList.remove('is-preview-hidden');
+        visibleGalleryPreviewCount += 1;
+      } else {
+        card.remove();
+      }
+    }
+
+    function renderMemoriesGrid() {
+      const grid = document.getElementById('memoriesGrid');
+      if (!grid) return;
+      visibleMemoryPreviewCount = 0;
+
+      grid.innerHTML = memoryDetails.map((item, index) => {
+        const mediaIndex = index + 1;
+        return `
+          <article class="memory-card dynamic-memory reveal is-preview-hidden" data-memory="${index}" tabindex="0" role="button">
+            <div class="memory-visual memory-video-preview">
+              <video muted playsinline preload="metadata" onloadedmetadata="showMemoryPreviewCard(this)" onerror="removeMissingMediaCard(this)">
+                <source src="videos/memory-${mediaIndex}.mp4" type="video/mp4" onerror="removeMissingMediaCard(this)">
+              </video>
+              <span class="memory-video-badge">PLAY</span>
+            </div>
+            <div class="memory-body">
+              <h3 class="memory-title">${item.title}</h3>
+              <p class="memory-date">12B Video Memory</p>
+            </div>
+          </article>`;
+      }).join('');
+    }
+
+    function renderGalleryGrid() {
+      const grid = document.getElementById('galleryGrid');
+      if (!grid) return;
+      visibleGalleryPreviewCount = 0;
+
+      grid.innerHTML = galleryDetails.map((item, index) => {
+        const file = item.media[0];
+        const label = `Photo ${String(index + 1).padStart(2, '0')}`;
+        const media = `<img src="${file.src}" alt="${label}" onload="showGalleryPreviewCard(this)" onerror="removeMissingMediaCard(this)">`;
+        return `<div class="gallery-item reveal is-preview-hidden" data-gallery="${index}" data-label="${label}" tabindex="0" role="button">${media}</div>`;
+      }).join('');
+    }
+
+    renderMemoriesGrid();
+    renderGalleryGrid();
+
+    // Hide/remove missing media robustly. Broken images trigger onerror immediately;
+    // broken videos can fail on the <source>, so we also clean unrevealed preview cards.
+    window.setTimeout(() => {
+      document.querySelectorAll('#memoriesGrid .memory-card.is-preview-hidden').forEach((card) => card.remove());
+      document.querySelectorAll('#galleryGrid .gallery-item.is-preview-hidden').forEach((card) => card.remove());
+    }, 4500);
+
+    document.querySelectorAll('#memoriesGrid .reveal, #galleryGrid .reveal').forEach((el, index) => {
+      el.style.transitionDelay = `${Math.min(index % 6, 5) * 55}ms`;
+      observer.observe(el);
+    });
+
+    const siteModal = document.getElementById('siteModal');
+    const modalKicker = document.getElementById('modalKicker');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const modalClose = document.getElementById('modalClose');
+    let modalBackAction = null;
+
+    function stopModalVideos() {
+      modalBody.querySelectorAll('video').forEach((video) => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+
+    function openModal({ kicker = '12B Archive', title = '', body = '' }) {
+      stopModalVideos();
+      modalKicker.textContent = kicker;
+      modalTitle.textContent = title;
+      modalBody.innerHTML = body;
+      siteModal.classList.add('show');
+      siteModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(forceClose = false) {
+      stopModalVideos();
+
+      if (!forceClose && typeof modalBackAction === 'function') {
+        const goBack = modalBackAction;
+        modalBackAction = null;
+        goBack();
+        return;
+      }
+
+      modalBackAction = null;
+      siteModal.classList.remove('show');
+      siteModal.setAttribute('aria-hidden', 'true');
+      modalBody.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+
+    function makeTiles(labels) {
+      return `<div class="modal-grid">${labels.map(label => `<div class="modal-tile">${label}</div>`).join('')}</div>`;
+    }
+
+    function makePills(tags) {
+      return `<div class="modal-actions">${tags.map(tag => `<span class="modal-pill">${tag}</span>`).join('')}</div>`;
+    }
+
+    function renderMedia(media = []) {
+      if (!media.length) return '';
+
+      const cards = media.map((file) => {
+        const isVideo = file.type === 'video';
+        const typeLabel = isVideo ? 'VIDEO' : 'PHOTO';
+        const safeCaption = file.caption || file.src;
+
+        if (isVideo) {
+          return `
+            <figure class="modal-media-card">
+              <span class="modal-media-type">${typeLabel}</span>
+              <video controls playsinline preload="metadata" onerror="removeMissingMediaCard(this)">
+                <source src="${file.src}" type="video/mp4" onerror="removeMissingMediaCard(this)">
+              </video>
+              <figcaption class="modal-media-caption">${safeCaption}</figcaption>
+            </figure>`;
+        }
+
+        return `
+          <figure class="modal-media-card">
+            <span class="modal-media-type">${typeLabel}</span>
+            <img src="${file.src}" alt="${safeCaption}" data-caption="${safeCaption}" onerror="removeMissingMediaCard(this)">
+            <figcaption class="modal-media-caption">${safeCaption}</figcaption>
+          </figure>`;
+      }).join('');
+
+      return `<div class="modal-media-grid">${cards}</div>`;
+    }
+
+    function openYear(index) {
+      const item = yearDetails[index];
+      if (!item) return;
+      openModal({
+        kicker: item.kicker,
+        title: item.title,
+        body: `
+          <p class="modal-lead">${item.text}</p>
+          ${renderMedia(item.media)}
+${makePills(item.tags)}
+        `
+      });
+    }
+
+    function openMemory(index, fromAllMemories = false) {
+      const item = memoryDetails[index];
+      if (!item) return;
+      openModal({
+        kicker: item.date,
+        title: item.title,
+        body: `
+          <p class="modal-lead">${item.text}</p>
+          ${renderMedia(item.media || [])}
+          ${makePills(item.tags)}
+        `
+      });
+
+      modalBackAction = fromAllMemories ? () => openAllMemories() : null;
+    }
+
+    function openGallery(index) {
+      const item = galleryDetails[index];
+      if (!item) return;
+      openModal({
+        kicker: 'Gallery',
+        title: item.title,
+        body: `
+          <p class="modal-lead">${item.text}</p>
+          ${renderMedia(item.media || [])}
+        `
+      });
+    }
+
+    function openAllMemories() {
+      modalBackAction = null;
+      const cards = memoryDetails.map((m, i) => {
+        const n = i + 1;
+        return `
+          <article class="memory-carousel-card" onclick="openMemory(${i}, true)" tabindex="0" role="button" onkeydown="if(event.key==='Enter') openMemory(${i}, true)">
+            <div class="memory-carousel-visual memory-carousel-video-only">
+              <video muted playsinline preload="metadata" onerror="removeMissingMediaCard(this)">
+                <source src="videos/memory-${n}.mp4" type="video/mp4" onerror="removeMissingMediaCard(this)">
+              </video>
+              <span class="memory-video-badge">PLAY</span>
+            </div>
+            <div class="memory-carousel-body">
+              <span class="memory-carousel-index">${String(n).padStart(2, '0')} · MEMORY</span>
+              <h3 class="memory-carousel-title">${m.title}</h3>
+              <p class="memory-carousel-text">${m.text}</p>
+              <span class="memory-carousel-button">Нээх →</span>
+            </div>
+          </article>`;
+      }).join('');
+
+      openModal({
+        kicker: 'All memories',
+        title: 'Бүх дурсамжууд',
+        body: `
+          <p class="modal-lead">Mouse wheel эсвэл trackpad-аар баруун тийш гүйлгээд бүх дурсамжаа үзээрэй.</p>
+          <div class="memory-carousel-wrap">
+            <div class="memory-carousel-hint">Scroll →</div>
+            <div class="memory-carousel" id="memoryCarousel">${cards}</div>
+          </div>
+        `
+      });
+
+      requestAnimationFrame(() => {
+        const carousel = document.getElementById('memoryCarousel');
+        if (!carousel) return;
+        carousel.scrollLeft = 0;
+        carousel.addEventListener('wheel', (event) => {
+          if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+            event.preventDefault();
+            carousel.scrollLeft += event.deltaY;
+          }
+        }, { passive: false });
+
+        window.setTimeout(() => {
+          carousel.querySelectorAll('.memory-carousel-card').forEach((card) => {
+            const video = card.querySelector('video');
+            if (!video || video.readyState === 0) card.remove();
+          });
+        }, 4500);
+      });
+    }
+
+    function openAllGallery() {
+      const allMedia = galleryDetails.flatMap(item => item.media || []);
+      openModal({
+        kicker: 'Full gallery',
+        title: 'Бүх зургийн хэсэг',
+        body: `${renderMedia(allMedia)}`
+      });
+    }
+
+    function openClassmate(index) {
+      const person = classmatesAlphabetical[index];
+      if (!person) return;
+      const socials = [person.fb ? `Facebook: ${person.fb}` : '', person.ig ? `Instagram: @${person.ig}` : ''].filter(Boolean);
+      openModal({
+        kicker: String(index + 1).padStart(2, '0') + ' · Classmate',
+        title: person.name,
+        body: `
+          <div class="modal-info-card"><strong>${person.icon} ${person.vibe}</strong></div>
+          <div class="modal-list">${socials.map(s => `<div>${s}</div>`).join('')}</div>
+          <p class="modal-lead" style="margin-top:1rem">Энэ хүний quote, зураг, богино story-г дараа энд нэмэх боломжтой.</p>
+        `
+      });
+    }
+
+    document.querySelectorAll('.year-card[data-year]').forEach(card => {
+      card.addEventListener('click', () => openYear(Number(card.dataset.year)));
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter') openYear(Number(card.dataset.year)); });
+    });
+    document.querySelectorAll('.memory-card[data-memory]').forEach(card => {
+      card.addEventListener('click', () => openMemory(Number(card.dataset.memory)));
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter') openMemory(Number(card.dataset.memory)); });
+    });
+    document.querySelectorAll('.gallery-item[data-gallery]').forEach(item => {
+      item.addEventListener('click', () => openGallery(Number(item.dataset.gallery)));
+      item.addEventListener('keydown', (e) => { if (e.key === 'Enter') openGallery(Number(item.dataset.gallery)); });
+    });
+    document.getElementById('viewAllMemories')?.addEventListener('click', (e) => { e.preventDefault(); openAllMemories(); });
+    document.getElementById('viewAllGallery')?.addEventListener('click', (e) => { e.preventDefault(); openAllGallery(); });
+    document.getElementById('classmatesGrid')?.addEventListener('click', (e) => {
+      const card = e.target.closest('.classmate-card[data-classmate]');
+      if (card) openClassmate(Number(card.dataset.classmate));
+    });
+    document.getElementById('classmatesGrid')?.addEventListener('keydown', (e) => {
+      const card = e.target.closest('.classmate-card[data-classmate]');
+      if (card && e.key === 'Enter') openClassmate(Number(card.dataset.classmate));
+    });
+
+
+    function getImageLightbox() {
+      let lightbox = document.getElementById('imageLightbox');
+      if (lightbox) return lightbox;
+      lightbox = document.createElement('div');
+      lightbox.id = 'imageLightbox';
+      lightbox.className = 'image-lightbox';
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightbox.innerHTML = `
+        <button class="image-lightbox-close" type="button" aria-label="Close image">×</button>
+        <div class="image-lightbox-inner">
+          <img id="imageLightboxImg" src="" alt="">
+          <div id="imageLightboxCaption" class="image-lightbox-caption"></div>
+        </div>
+      `;
+      document.body.appendChild(lightbox);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target.classList.contains('image-lightbox-close')) closeImageLightbox();
+      });
+      return lightbox;
+    }
+
+    function openImageLightbox(src, caption = '') {
+      const lightbox = getImageLightbox();
+      const img = lightbox.querySelector('#imageLightboxImg');
+      const cap = lightbox.querySelector('#imageLightboxCaption');
+      img.src = src;
+      img.alt = caption || '12B memory image';
+      cap.textContent = caption || '';
+      lightbox.classList.add('show');
+      lightbox.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeImageLightbox() {
+      const lightbox = document.getElementById('imageLightbox');
+      if (!lightbox) return;
+      lightbox.classList.remove('show');
+      lightbox.setAttribute('aria-hidden', 'true');
+      const img = lightbox.querySelector('#imageLightboxImg');
+      if (img) img.src = '';
+    }
+
+    modalBody.addEventListener('click', (e) => {
+      const img = e.target.closest('.modal-media-card img');
+      if (!img) return;
+      openImageLightbox(img.getAttribute('src'), img.dataset.caption || img.alt || '');
+    });
+
+    modalClose.addEventListener('click', () => closeModal(false));
+    siteModal.addEventListener('click', (e) => { if (e.target === siteModal) closeModal(); });
+    window.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const lightbox = document.getElementById('imageLightbox');
+      if (lightbox?.classList.contains('show')) { closeImageLightbox(); return; }
+      if (siteModal.classList.contains('show')) closeModal();
+    });
+
+
+    const sitePassword = '12B2026';
+    const loginGate = document.getElementById('loginGate');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginButton = document.getElementById('loginButton');
+    const loginError = document.getElementById('loginError');
+
+    function unlockSite() {
+      if (passwordInput.value.trim() === sitePassword) {
+        loginError.classList.remove('show');
+        loginGate.classList.add('unlocked');
+        setTimeout(() => { loginGate.style.display = 'none'; }, 580);
+      } else {
+        loginError.classList.add('show');
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    }
+    loginButton.addEventListener('click', unlockSite);
+    passwordInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') unlockSite();
+    });
+    window.addEventListener('load', () => passwordInput.focus());
+
+    /* ── Luxury floating gold particles ─────────────────────── */
+    (function spawnParticles() {
+      const container = document.getElementById('luxParticles');
+      if (!container) return;
+      const count = 28;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'lux-particle';
+        const size = Math.random() * 3.2 + 1.2;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 18;
+        const dur   = Math.random() * 14 + 10;
+        const gold  = Math.random() > 0.35;
+        const alpha1 = (Math.random()*.5+.4).toFixed(2);
+        const alpha2 = (Math.random()*.3+.2).toFixed(2);
+        const col = gold ? 'rgba(212,175,103,'+alpha1+')' : 'rgba(200,200,220,'+alpha2+')';
+        p.style.cssText = 'width:'+size+'px;height:'+size+'px;left:'+left+'%;animation-duration:'+dur+'s;animation-delay:'+delay+'s;background:radial-gradient(circle,'+col+',transparent 70%);box-shadow:0 0 '+(size*2.5)+'px '+col+';';
+        container.appendChild(p);
+      }
+    })();
+
+
+    const countdownStart = new Date('2026-05-29T00:00:00+08:00');
+    const countdownEnd = new Date('2036-05-29T00:00:00+08:00');
+
+    function setCountdownText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    function updateTenYearCountdown() {
+      const now = new Date();
+      const status = document.getElementById('countdownStatus');
+      const progress = document.getElementById('cdProgress');
+      const percent = document.getElementById('cdPercent');
+      if (!status || !progress || !percent) return;
+
+      let target = countdownEnd;
+      let mode = 'ҮЛДСЭН ХУГАЦАА';
+      if (now < countdownStart) {
+        target = countdownStart;
+        mode = 'ЭХЛЭХЭД ҮЛДСЭН';
+      } else if (now >= countdownEnd) {
+        setCountdownText('cdYears', '00');
+        setCountdownText('cdDays', '000');
+        setCountdownText('cdHours', '00');
+        setCountdownText('cdMinutes', '00');
+        status.textContent = 'ДУУССАН';
+        progress.style.width = '100%';
+        percent.textContent = '100% completed';
+        return;
+      }
+
+      const diff = Math.max(0, target - now);
+      const dayMs = 24 * 60 * 60 * 1000;
+      const hourMs = 60 * 60 * 1000;
+      const minuteMs = 60 * 1000;
+      const totalDays = Math.floor(diff / dayMs);
+      const years = Math.floor(totalDays / 365);
+      const days = totalDays % 365;
+      const hours = Math.floor((diff % dayMs) / hourMs);
+      const minutes = Math.floor((diff % hourMs) / minuteMs);
+
+      setCountdownText('cdYears', String(years).padStart(2, '0'));
+      setCountdownText('cdDays', String(days).padStart(3, '0'));
+      setCountdownText('cdHours', String(hours).padStart(2, '0'));
+      setCountdownText('cdMinutes', String(minutes).padStart(2, '0'));
+      status.textContent = mode;
+
+      const total = countdownEnd - countdownStart;
+      const done = Math.min(Math.max(now - countdownStart, 0), total);
+      const pct = total > 0 ? (done / total) * 100 : 0;
+      progress.style.width = `${pct.toFixed(4)}%`;
+      percent.textContent = `${pct.toFixed(2)}% completed`;
+    }
+
+    updateTenYearCountdown();
+    setInterval(updateTenYearCountdown, 1000);
+
+  </script>
+</body>
+</html>
